@@ -8,7 +8,7 @@ namespace SolidDynamics.TestDataSampling.RandomRecordSelection
 	{
 		public decimal ProportionToSelect { get; set; }
 
-		public Dictionary<Type, Converter<object, string>> CustomStringConversions { get; set; } = new Dictionary<Type, Converter<object, string>>();
+		public Dictionary<Type, Func<object, string>> CustomStringConversions { get; set; } = new Dictionary<Type, Func<object, string>>();
 
 		public RandomRecordSelector(decimal proportionToSelect)
 		{
@@ -44,7 +44,7 @@ namespace SolidDynamics.TestDataSampling.RandomRecordSelection
 
 			return new RandomRecordSelectionResponse(randomRecordSelectionRequest.EntityName)
 			{
-				SelectedRecords = selectedRecordGroups
+				RecordGroups = selectedRecordGroups
 			};
 		}
 

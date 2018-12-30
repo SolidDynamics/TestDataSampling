@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2016
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolidDynamics,TestDataSampling", "SolidDynamics.RandomRecordSelector\SolidDynamics,TestDataSampling.csproj", "{1AA69CB6-0235-4D1C-9897-10B22292C0FA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolidDynamics,TestDataSampling", "SolidDynamics.TestDataSampling\SolidDynamics,TestDataSampling.csproj", "{1AA69CB6-0235-4D1C-9897-10B22292C0FA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolidDynamics.TestDataSampling.Tests", "SolidDynamics.TestDataSampling.Tests\SolidDynamics.TestDataSampling.Tests.csproj", "{2C5402CB-8DAD-41BC-9421-86E8D5A7F1FC}"
 EndProject

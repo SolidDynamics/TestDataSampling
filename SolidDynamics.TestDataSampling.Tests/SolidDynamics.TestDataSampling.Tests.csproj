@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SolidDynamics.RandomRecordSelector\SolidDynamics,TestDataSampling.csproj" />
+    <ProjectReference Include="..\SolidDynamics.TestDataSampling\SolidDynamics,TestDataSampling.csproj" />
   </ItemGroup>
 
   <ItemGroup>

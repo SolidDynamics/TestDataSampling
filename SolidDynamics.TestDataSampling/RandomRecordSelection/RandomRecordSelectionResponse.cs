@@ -13,6 +13,6 @@ namespace SolidDynamics.TestDataSampling.RandomRecordSelection
 
 		public string EntityName { get; }
 
-		public Dictionary<RecordGroup, List<Guid>> SelectedRecords { get; internal set; }
+		public Dictionary<RecordGroup, List<Guid>> RecordGroups { get; internal set; }
 	}
 }

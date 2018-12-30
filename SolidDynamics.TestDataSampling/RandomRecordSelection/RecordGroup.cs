@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,7 +16,8 @@ namespace SolidDynamics.TestDataSampling.RandomRecordSelection
 
 		public override string ToString()
 		{
-			return string.Join(";", FieldValues.Select(f => $"\"{f.Key}\":\"{f.Value}\""));
+			return JsonConvert.SerializeObject(FieldValues);
+			//return string.Join(";", FieldValues.Select(f => $"\"{f.Key}\":\"{f.Value}\""));
 		}
 
 		public bool Equals(RecordGroup other)

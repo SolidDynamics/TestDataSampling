@@ -116,8 +116,8 @@ namespace SolidDynamics.TestDataSampling.Tests
 			var responseEntity = response.First();
 
 			Assert.AreEqual("plants", responseEntity.EntityName);
-			Assert.AreEqual(1, responseEntity.SelectedRecords.Count);
-			Assert.AreEqual(3, responseEntity.SelectedRecords.First().Value.Count);
+			Assert.AreEqual(1, responseEntity.RecordGroups.Count);
+			Assert.AreEqual(3, responseEntity.RecordGroups.First().Value.Count);
 		}
 
 		[TestMethod]
@@ -133,9 +133,9 @@ namespace SolidDynamics.TestDataSampling.Tests
 			var responseEntity = response.First();
 
 			Assert.AreEqual("plants", responseEntity.EntityName);
-			Assert.AreEqual(2, responseEntity.SelectedRecords.Count);
-			Assert.AreEqual(3, responseEntity.SelectedRecords.Single(x => x.Key.FieldValues.Single().Value == "fruit").Value.Count);
-			Assert.AreEqual(2, responseEntity.SelectedRecords.Single(x => x.Key.FieldValues.Single().Value == "vegetable").Value.Count);
+			Assert.AreEqual(2, responseEntity.RecordGroups.Count);
+			Assert.AreEqual(3, responseEntity.RecordGroups.Single(x => x.Key.FieldValues.Single().Value.ToString() == "fruit").Value.Count);
+			Assert.AreEqual(2, responseEntity.RecordGroups.Single(x => x.Key.FieldValues.Single().Value.ToString() == "vegetable").Value.Count);
 		}
 
 		[TestMethod]
@@ -144,6 +144,9 @@ namespace SolidDynamics.TestDataSampling.Tests
 			var request = new RandomRecordSelectionRequest("plants", "id", new List<string>() { "price" });
 			request.Records = sampleData;
 			RandomRecordSelector randomRecordSelector = new RandomRecordSelector(1m);
+			randomRecordSelector.CustomStringConversions
+				.Add(typeof(PlantPrice),
+				x => PlantPriceToString(x));
 			var response = randomRecordSelector.Execute(request);
 
 			Assert.AreEqual(1, response.Count());
@@ -151,10 +154,38 @@ namespace SolidDynamics.TestDataSampling.Tests
 			var responseEntity = response.First();
 
 			Assert.AreEqual("plants", responseEntity.EntityName);
-			Assert.AreEqual(4, responseEntity.SelectedRecords.Count);
-			var TwentyFivePerKiloGroup = responseEntity.SelectedRecords.Single(x => ((PlantPrice)x.Key.FieldValues.Single().Value).Amount == 25 && ((PlantPrice)x.Key.FieldValues.Single().Value).Unit == "kg");
+			Assert.AreEqual(4, responseEntity.RecordGroups.Count);
 
+			var TwentyFivePerKiloGroup = responseEntity.RecordGroups.Single(x => x.Key.ToString() == "{\"price\":\"£25 per kg\"}");
 			Assert.AreEqual(4, TwentyFivePerKiloGroup.Value.Count);
+		}
+
+		[TestMethod]
+		public void GroupMultipleAttributesResolvesCorrectly()
+		{
+			var request = new RandomRecordSelectionRequest("plants", "id", new List<string>() { "type","price" });
+			request.Records = sampleData;
+			RandomRecordSelector randomRecordSelector = new RandomRecordSelector(1m);
+			randomRecordSelector.CustomStringConversions
+				.Add(typeof(PlantPrice),
+				x => PlantPriceToString(x));
+			var response = randomRecordSelector.Execute(request);
+
+			Assert.AreEqual(1, response.Count());
+
+			var responseEntity = response.First();
+
+			Assert.AreEqual("plants", responseEntity.EntityName);
+			Assert.AreEqual(8, responseEntity.RecordGroups.Count);
+
+			var TwentyFivePerKiloFruitGroup = responseEntity.RecordGroups.Single(x => x.Key.ToString() == "{\"type\":\"fruit\",\"price\":\"£25 per kg\"}");
+			Assert.AreEqual(3, TwentyFivePerKiloFruitGroup.Value.Count);
+		}
+
+		private static string PlantPriceToString(object pp)
+		{
+			var plantPrice = (PlantPrice)pp;
+			return $"£{plantPrice.Amount} per {plantPrice.Unit}";
 		}
 	}
 
