@@ -6,7 +6,11 @@ namespace SolidDynamics.TestDataSampling.RandomRecordSelection
 
 	public class RandomRecordSelectionResponse
 	{
-		internal RandomRecordSelectionResponse(string entityName)
+		public RandomRecordSelectionResponse()
+		{
+		}
+
+		public RandomRecordSelectionResponse(string entityName)
 		{
 			EntityName = entityName;
 		}

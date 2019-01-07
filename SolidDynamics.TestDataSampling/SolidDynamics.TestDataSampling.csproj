@@ -10,6 +10,8 @@
     <Description>Provides functionality to select a random sample subset of data for multiple use cases. These include deleting data from development/test systems after copying the production database</Description>
     <PackageTags>sample, data, random, subset, group, records</PackageTags>
     <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+    <PackageIconUrl>https://github.com/SolidDynamics/TestDataSampling/blob/master/SolidDynamics.TestDataSampling/SolidDynamics.TestDataSampling.png</PackageIconUrl>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
