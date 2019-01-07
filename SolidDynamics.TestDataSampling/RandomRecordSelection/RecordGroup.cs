@@ -1,10 +1,15 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Globalization;
 using System.Linq;
 
 namespace SolidDynamics.TestDataSampling.RandomRecordSelection
 {
+	[TypeConverter(typeof(RecordGroupTypeConverter))]
 	public class RecordGroup : IEquatable<RecordGroup>
 	{
 		public RecordGroup(Dictionary<string, object> fieldValues)
@@ -12,12 +17,11 @@ namespace SolidDynamics.TestDataSampling.RandomRecordSelection
 			FieldValues = fieldValues;
 		}
 
-		public Dictionary<string, object> FieldValues { get; }
+		public Dictionary<string, object> FieldValues { get; set; }
 
 		public override string ToString()
 		{
 			return JsonConvert.SerializeObject(FieldValues);
-			//return string.Join(";", FieldValues.Select(f => $"\"{f.Key}\":\"{f.Value}\""));
 		}
 
 		public bool Equals(RecordGroup other)
@@ -57,6 +61,24 @@ namespace SolidDynamics.TestDataSampling.RandomRecordSelection
 		public static bool operator !=(RecordGroup left, RecordGroup right)
 		{
 			return !Equals(left, right);
+		}
+	}
+
+	public class RecordGroupTypeConverter : TypeConverter
+	{
+		public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+		{
+			return sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
+		}
+
+		public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+		{
+			if (value is string)
+			{
+				var dictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(value.ToString());
+				return new RecordGroup(dictionary);
+			}
+			return base.ConvertFrom(context, culture, value);
 		}
 	}
 }

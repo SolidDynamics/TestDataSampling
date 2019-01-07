@@ -3,6 +3,7 @@ using SolidDynamics.TestDataSampling.RandomRecordSelection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace SolidDynamics.TestDataSampling.Tests
 {
@@ -180,6 +181,26 @@ namespace SolidDynamics.TestDataSampling.Tests
 
 			var TwentyFivePerKiloFruitGroup = responseEntity.RecordGroups.Single(x => x.Key.ToString() == "{\"type\":\"fruit\",\"price\":\"£25 per kg\"}");
 			Assert.AreEqual(3, TwentyFivePerKiloFruitGroup.Value.Count);
+		}
+
+		[TestMethod]
+		public void CanJSONSerializeAndDeserializeResponse()
+		{
+			var request =
+				new RandomRecordSelectionRequest("plants", "id", new List<string>() {"type", "price"})
+				{
+					Records = sampleData
+				};
+			var randomRecordSelector = new RandomRecordSelector(1m);
+			randomRecordSelector.CustomStringConversions
+				.Add(typeof(PlantPrice),
+					x => PlantPriceToString(x));
+			var response = randomRecordSelector.Execute(request).ToList();
+
+			var json = JsonConvert.SerializeObject(response);
+
+			var deserializedResponse = 
+				JsonConvert.DeserializeObject<IEnumerable<RandomRecordSelectionResponse>>(json);
 		}
 
 		private static string PlantPriceToString(object pp)
